@@ -1,99 +1,67 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>弹窗页面</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        body.deepsea-theme {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #1a2980 0%, #26d0ce 100%) !important;
-            overflow: hidden;
-        }
+// main.js
+document.addEventListener("DOMContentLoaded", () => {
+    const targetUrl = "https://ajs.aijiasu.life/#/login";
+    const popupButton = document.getElementById("popupButton");
+    const popupContainer = document.getElementById("popupContainer");
 
-        /* 弹窗样式 */
-        .popup-container {
-            position: fixed;
-            inset: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: rgba(0,0,0,0.6);
-            z-index: 1000;
-        }
-        .popup-box {
-            background: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            width: 320px;
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        }
-        .popup-header h2 {
-            margin: 0 0 10px;
-        }
-        .popup-content p {
-            margin: 0 0 20px;
-        }
-        .popup-btn {
-            padding: 8px 16px;
-            cursor: pointer;
-            border: none;
-            background: #667eea;
-            color: #fff;
-            border-radius: 5px;
-            font-size: 14px;
-        }
+    // 点击按钮跳转
+    popupButton.addEventListener("click", () => {
+        window.location.href = targetUrl;
+    });
 
-        /* 粒子背景 */
-        #particles {
-            position: fixed;
-            inset: 0;
-            z-index: -1;
-        }
-    </style>
-</head>
-<body class="deepsea-theme">
-    <div class="background-animation" id="particles"></div>
+    // 5 秒自动跳转
+    setTimeout(() => {
+        window.location.href = targetUrl;
+    }, 5000);
 
-    <div class="popup-container" id="popupContainer">
-        <div class="popup-box">
-            <div class="popup-header">
-                <h2 class="popup-title">重要通知</h2>
-            </div>
-            <div class="popup-content">
-                <p class="popup-message">这是一个弹窗通知内容。</p>
-            </div>
-            <div class="popup-footer">
-                <button class="popup-btn" id="popupButton">确定</button>
-            </div>
-        </div>
-    </div>
+    // 简单粒子效果
+    const canvas = document.createElement("canvas");
+    canvas.id = "particleCanvas";
+    document.getElementById("particles").appendChild(canvas);
+    const ctx = canvas.getContext("2d");
 
-    <script>
-        const targetUrl = "https://ajs.aijiasu.life/#/login";
-        const popupButton = document.getElementById("popupButton");
-        const popupContainer = document.getElementById("popupContainer");
-
-        // 点击按钮跳转
-        popupButton.addEventListener("click", () => {
-            window.location.href = targetUrl;
-        });
-
-        // 5 秒自动跳转
-        setTimeout(() => {
-            window.location.href = targetUrl;
-        }, 5000);
-
-        // 简单粒子效果
-        const canvas = document.createElement('canvas');
-        canvas.id = "particleCanvas";
-        document.getElementById('particles').appendChild(canvas);
-        const ctx = canvas.getContext('2d');
+    function resizeCanvas() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
+    }
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
 
-        let particlesArray = [];
-        const partic
+    class Particle {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.size = Math.random() * 2 + 1;
+            this.speedX = (Math.random() - 0.5) * 1;
+            this.speedY = (Math.random() - 0.5) * 1;
+        }
+        update() {
+            this.x += this.speedX;
+            this.y += this.speedY;
+            if(this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+            if(this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+        }
+        draw() {
+            ctx.fillStyle = "rgba(255,255,255,0.8)";
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI*2);
+            ctx.fill();
+        }
+    }
+
+    const particlesArray = [];
+    const numParticles = Math.floor((canvas.width * canvas.height) / 8000);
+    for(let i=0;i<numParticles;i++){
+        particlesArray.push(new Particle());
+    }
+
+    function animate() {
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        particlesArray.forEach(p => {
+            p.update();
+            p.draw();
+        });
+        requestAnimationFrame(animate);
+    }
+    animate();
+});
