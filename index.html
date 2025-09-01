@@ -17,6 +17,43 @@
         body.deepsea-theme {
             background: linear-gradient(135deg, #1a2980 0%, #26d0ce 100%) !important;
         }
+        .progress-bar {
+            width: 0;
+            height: 5px;
+            background: #667eea;
+            transition: width 0.3s;
+        }
+        .progress-container {
+            width: 100%;
+            background: #ccc;
+            margin-top: 10px;
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+        .guide-box {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            width: 300px;
+        }
+        .browser-icons {
+            display: flex;
+            justify-content: space-around;
+            margin: 10px 0;
+        }
+        .guide-btn {
+            padding: 6px 12px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body class="deepsea-theme">
@@ -30,7 +67,6 @@
             <p class="guide-text" id="guideText">
                 检测到您正在使用微信或QQ内置浏览器访问，为了获得最佳体验，请点击右上角菜单，选择"在浏览器中打开"。
             </p>
-            
             <div class="browser-icons">
                 <div class="browser-icon">
                     <i class="fab fa-chrome" aria-hidden="true"></i>
@@ -49,7 +85,6 @@
                     <span>Edge</span>
                 </div>
             </div>
-            
             <button class="guide-btn" id="copyUrlBtn">复制链接地址</button>
         </div>
     </div>
@@ -73,6 +108,47 @@
         </div>
     </main>
 
-    <script src="src/js/main.js" type="module"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const countdownEl = document.getElementById("countdown");
+            const targetEl = document.getElementById("targetUrl");
+            const progressBar = document.querySelector(".progress-bar");
+            const browserOverlay = document.getElementById("browserOverlay");
+            const copyBtn = document.getElementById("copyUrlBtn");
+
+            const targetUrl = targetEl.innerText.trim();
+            let countdown = parseInt(countdownEl.innerText) || 5;
+
+            // 检测微信/QQ浏览器
+            const ua = navigator.userAgent;
+            const isWxQqBrowser = /MicroMessenger|QQ\//i.test(ua);
+            if (isWxQqBrowser) {
+                browserOverlay.style.display = "flex";
+            }
+
+            // 复制链接
+            copyBtn.addEventListener("click", () => {
+                navigator.clipboard.writeText(targetUrl).then(() => {
+                    alert("链接已复制，可在浏览器打开！");
+                }).catch(() => {
+                    alert("复制失败，请手动复制链接。");
+                });
+            });
+
+            // 倒计时和进度条
+            const timer = setInterval(() => {
+                countdown--;
+                countdownEl.innerText = countdown;
+
+                const progress = ((5 - countdown) / 5) * 100;
+                progressBar.style.width = `${progress}%`;
+
+                if (countdown <= 0) {
+                    clearInterval(timer);
+                    window.location.href = targetUrl;
+                }
+            }, 1000);
+        });
+    </script>
 </body>
 </html>
