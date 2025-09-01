@@ -1,13 +1,8 @@
 {
-    "domains": ["aHR0cHM6Ly9hanMuYWlqaWFzdS5saWZlLyMvbG9naW4=",],
-    "countdownDuration": 5,
-    "pageTitle": "跳转到我的网站",
-    "theme": "forest",
-    "footerCode": "<p style='text-align: center; margin-top: 20px; color: #666;'>© 2023 My Website. All rights reserved.</p>",
-    "popup": {
-        "title": "重要通知",
-        "content": "您无法访问，网站请联系网站管理人员<p>联系方式：xxxx",
-        "buttonText": "确定",
-        "buttonLink": "#"
-    }
+  "domains": ["aHR0cHM6Ly9leGFtcGxlLmNvbQ=="],
+  "countdownDuration": 5,
+  "logoText": "Jump-page",
+  "logoColor": "linear-gradient(45deg, #667eea 0%, #764ba2 100%)",
+  "pageTitle": "正在跳转...",
+  "theme": "deepsea"
 }
