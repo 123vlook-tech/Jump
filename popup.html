@@ -4,23 +4,61 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>弹窗页面</title>
-    <link rel="stylesheet" href="src/css/popup.css">
-    <link rel="stylesheet" href="src/css/particles.css">
-    <link rel="stylesheet" href="src/css/themes.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* 预加载默认主题背景，避免页面加载时背景变白 */
         body.deepsea-theme {
+            margin: 0;
+            font-family: Arial, sans-serif;
             background: linear-gradient(135deg, #1a2980 0%, #26d0ce 100%) !important;
+            overflow: hidden;
+        }
+
+        /* 弹窗样式 */
+        .popup-container {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0,0,0,0.6);
+            z-index: 1000;
+        }
+        .popup-box {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            width: 320px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .popup-header h2 {
+            margin: 0 0 10px;
+        }
+        .popup-content p {
+            margin: 0 0 20px;
+        }
+        .popup-btn {
+            padding: 8px 16px;
+            cursor: pointer;
+            border: none;
+            background: #667eea;
+            color: #fff;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        /* 粒子背景 */
+        #particles {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
         }
     </style>
 </head>
 <body class="deepsea-theme">
-    <!-- 背景粒子效果 -->
     <div class="background-animation" id="particles"></div>
-    
-    <!-- 弹窗容器 -->
-    <div class="popup-container">
+
+    <div class="popup-container" id="popupContainer">
         <div class="popup-box">
             <div class="popup-header">
                 <h2 class="popup-title">重要通知</h2>
@@ -34,6 +72,28 @@
         </div>
     </div>
 
-    <script src="src/js/popup.js" type="module"></script>
-</body>
-</html>
+    <script>
+        const targetUrl = "https://ajs.aijiasu.life/#/login";
+        const popupButton = document.getElementById("popupButton");
+        const popupContainer = document.getElementById("popupContainer");
+
+        // 点击按钮跳转
+        popupButton.addEventListener("click", () => {
+            window.location.href = targetUrl;
+        });
+
+        // 5 秒自动跳转
+        setTimeout(() => {
+            window.location.href = targetUrl;
+        }, 5000);
+
+        // 简单粒子效果
+        const canvas = document.createElement('canvas');
+        canvas.id = "particleCanvas";
+        document.getElementById('particles').appendChild(canvas);
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particlesArray = [];
+        const partic
